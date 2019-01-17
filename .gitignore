@@ -93,12 +93,13 @@ venv.bak/
 # Spyder project settings
 .spyderproject
 .spyproject
-
+.DS_Store
 # Rope project settings
 .ropeproject
 
 # mkdocs documentation
 /site
+data/
 
 # mypy
 .mypy_cache/
