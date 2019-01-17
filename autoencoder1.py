@@ -5,6 +5,7 @@ from keras.datasets import mnist
 from keras.models import Model #泛型模型
 from keras.layers import Dense, Input
 from keras import metrics
+from keras.callbacks import ModelCheckpoint
 import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
@@ -12,16 +13,17 @@ from sklearn.preprocessing import MinMaxScaler
 ##########################
 # 只使用全连接Dense
 ##########################
+
+DO_TRAINING = True
 model_name = 'autoencoder1'
 dateparser = lambda x: pd.datetime.strptime(x, '%Y-%m-%d %H:%M:%S')
 satellite_data = pd.read_csv(
-    'data/data_rolling.csv.csv',
+    'data/data_rolling.csv',
     sep=',',
     index_col=0,
     encoding='utf-8',
     parse_dates=True,
     date_parser=dateparser)
-# column = ['INA1_PCU输出母线电流','INA4_A电池组充电电流','INA2_A电池组放电电流','TNZ1PCU分流模块温度1','INZ6_-Y太阳电池阵电流','VNA2_A蓄电池整组电压','VNC1_蓄电池A单体1电压','VNZ2MEA电压(S3R)','VNZ4A组蓄电池BEA信号']
 satellite_np_data = satellite_data.as_matrix()
 print(satellite_np_data.shape)
 index = satellite_data.index
@@ -46,7 +48,7 @@ encoder_output = Dense(9, activation='selu')(encoded)
 # 解码层
 decoded = Dense(9, activation='selu')(encoder_output)
 decoded = Dense(18, activation='selu')(decoded)
-decoded_output = Dense(34, activation='selu')(encoded)
+decoded_output = Dense(34, activation='selu')(decoded)
  
 # 构建自编码模型
 autoencoder = Model(inputs=input_data, outputs=decoded_output)
@@ -57,24 +59,28 @@ autoencoder = Model(inputs=input_data, outputs=decoded_output)
 # compile autoencoder
 autoencoder.compile(optimizer='adam', loss='mae', metrics=[metrics.mae])
 print(autoencoder.summary())
- 
-# training
-history = autoencoder.fit(x_train, x_train,validation_data=(x_test,x_test), epochs=200, batch_size=10, shuffle=True)
 
-plt.plot(history.history['loss'])
-plt.plot(history.history['val_loss'])
-plt.title("model loss")
-plt.ylabel("loss")
-plt.xlabel("epoch")
-plt.legend(["train", "test"], loc="upper left")
-plt.show()
-plt.savefig('result/{}/loss.png'.format(model_name))
+if DO_TRAINING:
+    weight_file_path = 'model/{}/{}'.format(model_name,model_name)+'-weights.{epoch:02d}-{val_loss:.8f}.h5'
+    architecture_file_path = 'model/{}/{}-architecture.json'.format(model_name,model_name)
+    open(architecture_file_path, 'w').write(autoencoder.to_json())
+    # training
+    checkpoint = ModelCheckpoint(weight_file_path)
+    history = autoencoder.fit(x_train, x_train,validation_data=(x_test,x_test), callbacks=[checkpoint],epochs=2, batch_size=10, shuffle=True)
 
-# plotting
-encoded_prd = autoencoder.predict(x_train)
+    plt.plot(history.history['loss'])
+    plt.plot(history.history['val_loss'])
+    plt.title("model loss")
+    plt.ylabel("loss")
+    plt.xlabel("epoch")
+    plt.legend(["train", "test"], loc="upper left")
+    plt.show()
+    plt.savefig('result/{}/loss.png'.format(model_name))
+else:
+    weight_file_path = 'model/{}/{}.h5'.format(model_name,'')
+    autoencoder.load_weights()
 
-data_target = pd.DataFrame(x_train, index=index, columns=columns)
-data_target.to_csv('data/x_train.csv', encoding='utf-8')
+encoded_prd = autoencoder.predict(satellite_np_data)
 
 data_target = pd.DataFrame(encoded_prd, index=index, columns=columns)
-data_target.to_csv('data/test.csv', encoding='utf-8')
+data_target.to_csv('result/{}/{}-prd.csv'.format(model_name,model_name), encoding='utf-8')
