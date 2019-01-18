@@ -77,9 +77,9 @@ for i, column in enumerate(data_new.columns):
     # plt.axes([0.14, 0.35, 0.77, 0.9])
     # ax.xaxis.set_tick_params(rotation=30)
     ax.set_title(column, FontProperties=font)
-plt.subplots_adjust(left=0.02, bottom=0.01, right=0.98, top=0.99, hspace=0.4, wspace=0.3)
+#plt.subplots_adjust(left=0.02, bottom=0.01, right=0.98, top=0.99, hspace=0.4, wspace=0.3)
 # left=0.02, bottom=0.01, right=0.98, top=0.99 分别代表到画布的左侧和底部的距离占整幅图宽和高的比例
-plt.savefig('result/column_new.png')
+#plt.savefig('result/column_new.png')
 
 # 对数据进行归一化、并且对数据'INA1_PCU输出母线电流'进行滑动平均去燥
 

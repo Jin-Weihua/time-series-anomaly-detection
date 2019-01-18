@@ -14,7 +14,7 @@ from sklearn.preprocessing import MinMaxScaler
 # 只使用全连接Dense
 ##########################
 
-DO_TRAINING = True
+DO_TRAINING = False
 model_name = 'autoencoder1'
 dateparser = lambda x: pd.datetime.strptime(x, '%Y-%m-%d %H:%M:%S')
 satellite_data = pd.read_csv(
@@ -54,7 +54,7 @@ decoded_output = Dense(34, activation='selu')(decoded)
 autoencoder = Model(inputs=input_data, outputs=decoded_output)
  
 # 构建编码模型
-# encoder = Model(inputs=input_data, outputs=encoder_output)
+encoder = Model(inputs=input_data, outputs=encoder_output)
  
 # compile autoencoder
 autoencoder.compile(optimizer='adam', loss='mae', metrics=[metrics.mae])
@@ -77,8 +77,12 @@ if DO_TRAINING:
     plt.show()
     plt.savefig('result/{}/loss.png'.format(model_name))
 else:
-    weight_file_path = 'model/{}/{}.h5'.format(model_name,'')
-    autoencoder.load_weights()
+    weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder1-weights.20-0.00488859')
+    autoencoder.load_weights(weight_file_path)
+
+features = encoder.predict(satellite_np_data)
+data_features = pd.DataFrame(features,index=index)
+data_features.to_csv('result/{}/{}-feat.csv'.format(model_name,model_name), encoding='utf-8')
 
 encoded_prd = autoencoder.predict(satellite_np_data)
 
