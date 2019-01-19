@@ -31,6 +31,6 @@ data_raw = data_raw1.loc[:,columns].iloc[0:10000]
 data = []
 columns = ['0','1','2','3','4','5','6','7','8']
 y = data_raw[columns]
-data.append(go.Scatter(x=data_raw.index, y=data_raw[columns], mode='markers+lines',name=columns))
+data.append(go.Scatter(x=data_raw.index, y=data_raw['8'], mode='markers+lines',name='features'))
 
-plotly.offline.plot(data, filename='result/{}/feat.html'.format(model_name), auto_open=True)
+plotly.offline.plot(data, filename='result/{}/feat8.html'.format(model_name), auto_open=True)
