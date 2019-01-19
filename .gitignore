@@ -101,6 +101,7 @@ venv.bak/
 /site
 data/
 .vscode/launch.json
+.vscode/settings.json
 *.csv
 
 # mypy
