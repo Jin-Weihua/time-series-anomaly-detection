@@ -18,7 +18,7 @@ DO_TRAINING = False
 model_name = 'autoencoder1'
 dateparser = lambda x: pd.datetime.strptime(x, '%Y-%m-%d %H:%M:%S')
 satellite_data = pd.read_csv(
-    'data/data_rolling.csv',
+    'data/data_anomaly_rolling.csv',
     sep=',',
     index_col=0,
     encoding='utf-8',
@@ -80,11 +80,11 @@ else:
     weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder1-weights.20-0.00488859')
     autoencoder.load_weights(weight_file_path)
 
-features = encoder.predict(satellite_np_data)
-data_features = pd.DataFrame(features,index=index)
-data_features.to_csv('result/{}/{}-feat.csv'.format(model_name,model_name), encoding='utf-8')
+# features = encoder.predict(satellite_np_data)
+# data_features = pd.DataFrame(features,index=index)
+# data_features.to_csv('result/{}/{}-feat.csv'.format(model_name,model_name), encoding='utf-8')
 
 encoded_prd = autoencoder.predict(satellite_np_data)
 
 data_target = pd.DataFrame(encoded_prd, index=index, columns=columns)
-data_target.to_csv('result/{}/{}-prd.csv'.format(model_name,model_name), encoding='utf-8')
+data_target.to_csv('result/{}/{}-ano-prd.csv'.format(model_name,model_name), encoding='utf-8')
