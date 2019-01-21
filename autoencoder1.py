@@ -14,7 +14,7 @@ from sklearn.preprocessing import MinMaxScaler
 # 只使用全连接Dense
 ##########################
 
-DO_TRAINING = False
+DO_TRAINING = True
 model_name = 'autoencoder1'
 dateparser = lambda x: pd.datetime.strptime(x, '%Y-%m-%d %H:%M:%S')
 satellite_data = pd.read_csv(
@@ -66,7 +66,7 @@ if DO_TRAINING:
     open(architecture_file_path, 'w').write(autoencoder.to_json())
     # training
     checkpoint = ModelCheckpoint(weight_file_path)
-    history = autoencoder.fit(x_train, x_train,validation_data=(x_test,x_test), callbacks=[checkpoint],epochs=20, batch_size=10, shuffle=True)
+    history = autoencoder.fit(x_train, x_train,validation_data=(x_test,x_test), callbacks=[checkpoint],epochs=200, batch_size=10, shuffle=True)
 
     plt.plot(history.history['loss'])
     plt.plot(history.history['val_loss'])
