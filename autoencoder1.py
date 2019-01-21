@@ -4,7 +4,7 @@ np.random.seed(1337)  # for reproducibility
 from keras.datasets import mnist
 from keras.models import Model #泛型模型
 from keras.layers import Dense, Input
-from keras import metrics
+from keras import metrics,regularizers
 from keras.callbacks import ModelCheckpoint
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -42,12 +42,12 @@ print(x_test.shape)
 input_data = Input(shape=(34,))
  
 # 编码层
-encoded = Dense(18, activation='selu')(input_data)
+encoded = Dense(18, activation='selu', kernel_regularizer=regularizers.l2(0.001))(input_data)
 encoder_output = Dense(9, activation='selu')(encoded)
  
 # 解码层
 decoded = Dense(9, activation='selu')(encoder_output)
-decoded = Dense(18, activation='selu')(decoded)
+decoded = Dense(18, activation='selu', kernel_regularizer=regularizers.l2(0.001))(decoded)
 decoded_output = Dense(34, activation='selu')(decoded)
  
 # 构建自编码模型
