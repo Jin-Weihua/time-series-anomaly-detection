@@ -11,14 +11,14 @@ import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 
 ##########################
-# 只使用全连接Dense
+# 只使用全连接Dense,正则自编码器--稀疏自编码器（kernel_regularizer）
 ##########################
 
-DO_TRAINING = True
+DO_TRAINING = False
 model_name = 'autoencoder1'
 dateparser = lambda x: pd.datetime.strptime(x, '%Y-%m-%d %H:%M:%S')
 satellite_data = pd.read_csv(
-    'data/data_rolling.csv',
+    'data/data_anomaly_rolling.csv',
     sep=',',
     index_col=0,
     encoding='utf-8',
@@ -77,7 +77,7 @@ if DO_TRAINING:
     plt.show()
     plt.savefig('result/{}/loss.png'.format(model_name))
 else:
-    weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder1-weights.20-0.00488859')
+    weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder1-weights.198-0.00662580')
     autoencoder.load_weights(weight_file_path)
 
 # features = encoder.predict(satellite_np_data)
