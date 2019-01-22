@@ -43,16 +43,16 @@ print(x_test.shape)
 input_data = Input(shape=(34,))
  
 # 编码层
-encoded = Dropout(0.2)(input_data)
-encoded = Dense(18, kernel_initializer='normal', activation='relu', kernel_constraint=maxnorm(3))(encoded)
-encoded = Dropout(0.2)(encoded)
+#encoded = Dropout(0.2)(input_data)
+encoded = Dense(18, kernel_initializer='normal', activation='relu', kernel_constraint=maxnorm(3))(input_data)
+#encoded = Dropout(0.2)(encoded)
 encoder_output = Dense(9, kernel_initializer='normal', activation='relu', kernel_constraint=maxnorm(3))(encoded)
  
 # 解码层
 decoded = Dense(9, kernel_initializer='normal', activation='relu', kernel_constraint=maxnorm(3))(encoder_output)
-decoded = Dropout(0.2)(decoded)
+#decoded = Dropout(0.2)(decoded)
 decoded = Dense(18, kernel_initializer='normal', activation='relu', kernel_constraint=maxnorm(3))(decoded)
-decoded = Dropout(0.2)(decoded)
+#decoded = Dropout(0.2)(decoded)
 decoded_output = Dense(34, activation='selu')(decoded)
  
 # 构建自编码模型
