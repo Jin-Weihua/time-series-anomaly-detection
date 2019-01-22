@@ -18,7 +18,7 @@ DO_TRAINING = True
 model_name = 'autoencoder1'
 dateparser = lambda x: pd.datetime.strptime(x, '%Y-%m-%d %H:%M:%S')
 satellite_data = pd.read_csv(
-    'data/data_anomaly_rolling.csv',
+    'data/data_rolling.csv',
     sep=',',
     index_col=0,
     encoding='utf-8',

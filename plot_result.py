@@ -40,7 +40,7 @@ data_prd = data_prd1.loc[:,column].iloc[0:10000]
 
 data = []
 print(type(data_raw.index))
-column = 'INA2_A电池组放电电流' 
+column = 'VNZ2MEA电压(S3R)' 
 data.append(go.Scatter(x=data_raw.index, y=data_raw[column], mode='markers+lines', name=column))
 data.append(go.Scatter(x=data_prd.index, y=data_prd[column], mode='markers', name=column))
 
