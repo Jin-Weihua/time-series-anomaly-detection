@@ -15,7 +15,7 @@ from keras.constraints import maxnorm
 # 只使用全连接Dense,正则自编码器--dropout
 ##########################
 
-DO_TRAINING = True
+DO_TRAINING = False
 model_name = 'autoencoder2'
 dateparser = lambda x: pd.datetime.strptime(x, '%Y-%m-%d %H:%M:%S')
 satellite_data = pd.read_csv(
@@ -82,7 +82,7 @@ if DO_TRAINING:
     plt.show()
     plt.savefig('result/{}/loss.png'.format(model_name))
 else:
-    weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder2-weights.198-0.00662580')
+    weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder2-weights.200-0.00500987')
     autoencoder.load_weights(weight_file_path)
 
 # features = encoder.predict(satellite_np_data)

@@ -45,9 +45,17 @@ font_size = 5
 # import data
 # 列名字有中文的时候，encoding='utf-8',不然会出错
 # index_col设置属性列，parse_dates设置是否解析拥有时间值的列
-dateparser = lambda x: pd.datetime.strptime(x, '%Y/%m/%d %H:%M:%S')
+dateparser = lambda x: pd.datetime.strptime(x, '%Y-%m-%d %H:%M:%S')
 data_raw = pd.read_csv(
-    'data/data_anomaly1.csv',
+    'data/data.csv',
+    sep=',',
+    index_col=0,
+    encoding='utf-8',
+    parse_dates=True,
+    date_parser=dateparser)
+dateparser = lambda x: pd.datetime.strptime(x, '%Y/%m/%d %H:%M:%S')
+data_anomaly = pd.read_csv(
+    'data/data_anomaly.csv',
     sep=',',
     index_col=0,
     encoding='GB18030',
@@ -58,13 +66,20 @@ print(data_raw.info())
 data_raw.drop([
     'TNT1-Y太阳电池内板温度1', 'TNT14锂离子蓄电池组A温度1', 'TNT15锂离子蓄电池组A温度2',
     'TNT4-Y太阳电池内板温度4','INZ1_PCU输出母线备份电流','INZ1_VC1_PCU输出母线备份电流(VC1)','INZ6_VC1_-Y太阳电池阵电流（VC1）','INZ7_VC1_+Y太阳电池阵电流(VC1)','VNA2_VC1_A蓄电池整组电压(VC1)','VNA3_VC1_B蓄电池整组电压(VC1)','VNZ2_VC1MEA电压(S3R)(VC1)','VNZ3_VC1MEA电压(BCDR)(VC1)'],axis=1,inplace=True)
+
+data_anomaly.drop([
+    'TNT1-Y太阳电池内板温度1', 'TNT14锂离子蓄电池组A温度1', 'TNT15锂离子蓄电池组A温度2',
+    'TNT4-Y太阳电池内板温度4','INZ1_PCU输出母线备份电流','INZ1_VC1_PCU输出母线备份电流(VC1)','INZ6_VC1_-Y太阳电池阵电流（VC1）','INZ7_VC1_+Y太阳电池阵电流(VC1)','VNA2_VC1_A蓄电池整组电压(VC1)','VNA3_VC1_B蓄电池整组电压(VC1)','VNZ2_VC1MEA电压(S3R)(VC1)','VNZ3_VC1MEA电压(BCDR)(VC1)'],axis=1,inplace=True)
+
 print('Train columns with null values:\n', data_raw.isnull().sum())
 print("-" * 10)
 
 print(data_raw.describe(include='all'))
-
+print(data_anomaly.describe(include='all'))
 data_new = data_raw.dropna()
+data_new_anomaly = data_anomaly.dropna()
 print(data_new.info())
+print(data_new_anomaly.info())
 # data_new.to_csv('data/data_std.csv', encoding='utf-8')
 
 
@@ -87,10 +102,19 @@ INA1_PCU = data_new['INA1_PCU输出母线电流'].rolling(5).mean()
 data_new.drop(['INA1_PCU输出母线电流'],axis=1,inplace=True)
 satellite_data = pd.concat([data_new, INA1_PCU], axis=1).dropna()
 satellite_np_data = satellite_data.as_matrix()
+
+INA1_PCU = data_new_anomaly['INA1_PCU输出母线电流'].rolling(5).mean()
+data_new_anomaly.drop(['INA1_PCU输出母线电流'],axis=1,inplace=True)
+satellite_data_anomaly = pd.concat([data_new_anomaly, INA1_PCU], axis=1).dropna()
+satellite_np_data_anomaly = satellite_data_anomaly.as_matrix()
+
 scaler = MinMaxScaler()
 satellite_np_data = scaler.fit_transform(satellite_np_data)
-print(satellite_np_data.shape)
-index = satellite_data.index
-columns = satellite_data.columns
-data_rolling = pd.DataFrame(satellite_np_data, index=index, columns=columns)
+
+satellite_np_data_anomaly = scaler.transform(satellite_np_data_anomaly)
+
+print(satellite_np_data_anomaly.shape)
+index = satellite_data_anomaly.index
+columns = satellite_data_anomaly.columns
+data_rolling = pd.DataFrame(satellite_np_data_anomaly, index=index, columns=columns)
 data_rolling.to_csv('data/data_anomaly_rolling.csv', encoding='utf-8')

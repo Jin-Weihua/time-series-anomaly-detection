@@ -16,7 +16,7 @@ import plotly.plotly as py
 import plotly.graph_objs as go
 import pandas as pd
 
-model_name = 'autoencoder1'
+model_name = 'autoencoder2'
 dateparser = lambda x: pd.datetime.strptime(x, '%Y-%m-%d %H:%M:%S')
 data_raw1 = pd.read_csv(
     'data/data_anomaly_rolling.csv',
@@ -40,7 +40,7 @@ data_prd = data_prd1.loc[:,column].iloc[0:80]
 
 data = []
 print(type(data_raw.index))
-column = 'TNZ1PCU分流模块温度1' 
+column = 'VNZ4A组蓄电池BEA信号' 
 data.append(go.Scatter(x=data_raw.index, y=data_raw[column], mode='markers+lines', name=column))
 data.append(go.Scatter(x=data_prd.index, y=data_prd[column], mode='markers', name=column))
 
