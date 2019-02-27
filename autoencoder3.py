@@ -16,7 +16,7 @@ from keras.constraints import maxnorm
 # 先训练一个特征，训练成功后，加入另外一个特征，直至训练完成
 ##########################
 
-DO_TRAINING = True
+DO_TRAINING = False
 model_name = 'autoencoder3'
 dateparser = lambda x: pd.datetime.strptime(x, '%Y-%m-%d %H:%M:%S')
 satellite_data = pd.read_csv(
@@ -29,7 +29,7 @@ satellite_data = pd.read_csv(
 
 for column in satellite_data.columns:
     if column not in ['VNZ4A组蓄电池BEA信号','VNZ5B组蓄电池BEA信号']:
-        satellite_data[column] = 1
+        satellite_data[column] = 0.5
 satellite_np_data = satellite_data.as_matrix()
 print(satellite_np_data.shape)
 index = satellite_data.index
@@ -48,16 +48,16 @@ input_data = Input(shape=(34,))
  
 # 编码层
 #encoded = Dropout(0.2)(input_data)
-encoded = Dense(18, kernel_initializer='normal', activation='relu', kernel_constraint=maxnorm(3))(input_data)
+encoded = Dense(18, kernel_initializer='normal', activation='tanh', kernel_constraint=maxnorm(3))(input_data)
 #encoded = Dropout(0.2)(encoded)
-encoder_output = Dense(9, kernel_initializer='normal', activation='relu', kernel_constraint=maxnorm(3))(encoded)
+encoder_output = Dense(9, kernel_initializer='normal', activation='tanh', kernel_constraint=maxnorm(3))(encoded)
  
 # 解码层
-decoded = Dense(9, kernel_initializer='normal', activation='relu', kernel_constraint=maxnorm(3))(encoder_output)
+decoded = Dense(9, kernel_initializer='normal', activation='tanh', kernel_constraint=maxnorm(3))(encoder_output)
 #decoded = Dropout(0.2)(decoded)
-decoded = Dense(18, kernel_initializer='normal', activation='relu', kernel_constraint=maxnorm(3))(decoded)
+decoded = Dense(18, kernel_initializer='normal', activation='tanh', kernel_constraint=maxnorm(3))(decoded)
 #decoded = Dropout(0.2)(decoded)
-decoded_output = Dense(34, activation='selu')(decoded)
+decoded_output = Dense(34, activation='tanh')(decoded)
  
 # 构建自编码模型
 autoencoder = Model(inputs=input_data, outputs=decoded_output)
@@ -86,7 +86,7 @@ if DO_TRAINING:
     plt.show()
     plt.savefig('result/{}/loss.png'.format(model_name))
 else:
-    weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder3-weights1.43-0.02632152')
+    weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder3-weights1.12-0.00066610')
     autoencoder.load_weights(weight_file_path)
 
 # features = encoder.predict(satellite_np_data)
