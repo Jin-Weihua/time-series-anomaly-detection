@@ -40,7 +40,7 @@ data_prd = data_prd1.loc[:,column].iloc[0:10000]
 
 data = []
 print(type(data_raw.index))
-column = 'VNZ4A组蓄电池BEA信号' 
+column = 'INZ6_-Y太阳电池阵电流' 
 data.append(go.Scatter(x=data_raw.index, y=data_raw[column], mode='markers+lines', name=column))
 data.append(go.Scatter(x=data_prd.index, y=data_prd[column], mode='markers', name=column))
 

@@ -28,15 +28,12 @@ satellite_data = pd.read_csv(
     date_parser=dateparser)
 
 for column in satellite_data.columns:
-    if column not in ['VNZ4A组蓄电池BEA信号','VNZ5B组蓄电池BEA信号']:
+    if column not in ['VNZ4A组蓄电池BEA信号','VNZ5B组蓄电池BEA信号','INZ6_-Y太阳电池阵电流','INZ7_+Y太阳电池阵电流']:
         satellite_data[column] = 0.5
 satellite_np_data = satellite_data.as_matrix()
 print(satellite_np_data.shape)
 index = satellite_data.index
 columns = satellite_data.columns
-
-
-
 
 x_train = satellite_np_data[0:80000]
 x_test = satellite_np_data[80000:96700]
@@ -69,13 +66,16 @@ encoder = Model(inputs=input_data, outputs=encoder_output)
 autoencoder.compile(optimizer='adam', loss='mae', metrics=[metrics.mae])
 print(autoencoder.summary())
 
+#weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder3-weights1.12-0.00066610')
+#autoencoder.load_weights(weight_file_path)
+
 if DO_TRAINING:
-    weight_file_path = 'model/{}/{}'.format(model_name,model_name)+'-weights1.{epoch:02d}-{val_loss:.8f}.h5'
+    weight_file_path = 'model/{}/{}'.format(model_name,model_name)+'-weights2.{epoch:02d}-{val_loss:.8f}.h5'
     architecture_file_path = 'model/{}/{}-architecture.json'.format(model_name,model_name)
     open(architecture_file_path, 'w').write(autoencoder.to_json())
     # training
     checkpoint = ModelCheckpoint(weight_file_path)
-    history = autoencoder.fit(x_train, x_train,validation_data=(x_test,x_test), callbacks=[checkpoint],epochs=200, batch_size=10, shuffle=True)
+    history = autoencoder.fit(x_train, x_train, validation_data=(x_test,x_test), callbacks=[checkpoint],epochs=200, batch_size=10, shuffle=True)
 
     plt.plot(history.history['loss'])
     plt.plot(history.history['val_loss'])
@@ -86,7 +86,7 @@ if DO_TRAINING:
     plt.show()
     plt.savefig('result/{}/loss.png'.format(model_name))
 else:
-    weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder3-weights1.12-0.00066610')
+    weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder3-weights2.02-0.00068093')
     autoencoder.load_weights(weight_file_path)
 
 # features = encoder.predict(satellite_np_data)
