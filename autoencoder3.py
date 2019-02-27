@@ -12,10 +12,11 @@ from sklearn.preprocessing import MinMaxScaler
 from keras.constraints import maxnorm
 
 ##########################
-# autoencoder2 中提取的特征有问题，测试使用基于LSTM的自编码器
+# autoencoder2 中提取的特征有问题，测试使用分布训练自编码器，
+# 先训练一个特征，训练成功后，加入另外一个特征，直至训练完成
 ##########################
 
-DO_TRAINING = False
+DO_TRAINING = True
 model_name = 'autoencoder3'
 dateparser = lambda x: pd.datetime.strptime(x, '%Y-%m-%d %H:%M:%S')
 satellite_data = pd.read_csv(
@@ -25,14 +26,17 @@ satellite_data = pd.read_csv(
     encoding='utf-8',
     parse_dates=True,
     date_parser=dateparser)
+
+for column in satellite_data.columns:
+    if column not in ['VNZ4A组蓄电池BEA信号','VNZ5B组蓄电池BEA信号']:
+        satellite_data[column] = 1
 satellite_np_data = satellite_data.as_matrix()
 print(satellite_np_data.shape)
 index = satellite_data.index
 columns = satellite_data.columns
-# input_dataset = np.reshape(
-#         satellite_np_data,
-#         ((int)(satellite_np_data.shape[0] / time_window_size),
-#             time_window_size, satellite_np_data.shape[1]))
+
+
+
 
 x_train = satellite_np_data[0:80000]
 x_test = satellite_np_data[80000:96700]
@@ -66,7 +70,7 @@ autoencoder.compile(optimizer='adam', loss='mae', metrics=[metrics.mae])
 print(autoencoder.summary())
 
 if DO_TRAINING:
-    weight_file_path = 'model/{}/{}'.format(model_name,model_name)+'-weights.{epoch:02d}-{val_loss:.8f}.h5'
+    weight_file_path = 'model/{}/{}'.format(model_name,model_name)+'-weights1.{epoch:02d}-{val_loss:.8f}.h5'
     architecture_file_path = 'model/{}/{}-architecture.json'.format(model_name,model_name)
     open(architecture_file_path, 'w').write(autoencoder.to_json())
     # training
@@ -82,14 +86,14 @@ if DO_TRAINING:
     plt.show()
     plt.savefig('result/{}/loss.png'.format(model_name))
 else:
-    weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder2-weights.200-0.00500987')
+    weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder3-weights1.43-0.02632152')
     autoencoder.load_weights(weight_file_path)
 
-features = encoder.predict(satellite_np_data)
-data_features = pd.DataFrame(features,index=index)
-data_features.to_csv('result/{}/{}-feat.csv'.format(model_name,model_name), encoding='utf-8')
+# features = encoder.predict(satellite_np_data)
+# data_features = pd.DataFrame(features,index=index)
+# data_features.to_csv('result/{}/{}-feat.csv'.format(model_name,model_name), encoding='utf-8')
 
 encoded_prd = autoencoder.predict(satellite_np_data)
 
 data_target = pd.DataFrame(encoded_prd, index=index, columns=columns)
-data_target.to_csv('result/{}/{}-prd.csv'.format(model_name,model_name), encoding='utf-8')
+data_target.to_csv('result/{}/{}-prd1.csv'.format(model_name,model_name), encoding='utf-8')
