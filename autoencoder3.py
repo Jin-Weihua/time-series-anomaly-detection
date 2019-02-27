@@ -66,8 +66,8 @@ encoder = Model(inputs=input_data, outputs=encoder_output)
 autoencoder.compile(optimizer='adam', loss='mae', metrics=[metrics.mae])
 print(autoencoder.summary())
 
-#weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder3-weights1.12-0.00066610')
-#autoencoder.load_weights(weight_file_path)
+# weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder3-weights1.12-0.00066610')
+# autoencoder.load_weights(weight_file_path)
 
 if DO_TRAINING:
     weight_file_path = 'model/{}/{}'.format(model_name,model_name)+'-weights2.{epoch:02d}-{val_loss:.8f}.h5'
@@ -86,7 +86,7 @@ if DO_TRAINING:
     plt.show()
     plt.savefig('result/{}/loss.png'.format(model_name))
 else:
-    weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder3-weights2.02-0.00068093')
+    weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder3-weights2.32-0.00066016')
     autoencoder.load_weights(weight_file_path)
 
 # features = encoder.predict(satellite_np_data)
@@ -96,4 +96,4 @@ else:
 encoded_prd = autoencoder.predict(satellite_np_data)
 
 data_target = pd.DataFrame(encoded_prd, index=index, columns=columns)
-data_target.to_csv('result/{}/{}-prd1.csv'.format(model_name,model_name), encoding='utf-8')
+data_target.to_csv('result/{}/{}-prd2.csv'.format(model_name,model_name), encoding='utf-8')
