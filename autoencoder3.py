@@ -28,7 +28,7 @@ satellite_data = pd.read_csv(
     date_parser=dateparser)
 # ['VNZ4A组蓄电池BEA信号','VNZ5B组蓄电池BEA信号','INZ6_-Y太阳电池阵电流','INZ7_+Y太阳电池阵电流']
 for column in satellite_data.columns:
-   if column not in ['VNZ4A组蓄电池BEA信号','VNZ5B组蓄电池BEA信号','INZ6_-Y太阳电池阵电流','INZ7_+Y太阳电池阵电流']:
+   if column not in ['VNZ4A组蓄电池BEA信号','VNZ5B组蓄电池BEA信号','INZ6_-Y太阳电池阵电流','INZ7_+Y太阳电池阵电流','INZ14_ABCR1输入电流','INZ15_ABCR2输入电流']:
        satellite_data[column] = 0.5
 satellite_np_data = satellite_data.as_matrix()
 print(satellite_np_data.shape)
@@ -66,14 +66,14 @@ encoder = Model(inputs=input_data, outputs=encoder_output)
 autoencoder.compile(optimizer='adam', loss='mae', metrics=[metrics.mae])
 print(autoencoder.summary())
 
-weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder3-weights1.148-0.00020910')
+#weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder3-weights1.148-0.00020910')
+#autoencoder.load_weights(weight_file_path)
+
+weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder3-weights2.118-0.00034362')
 autoencoder.load_weights(weight_file_path)
 
-# weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder3-weights2.200-0.00026621')
-# autoencoder.load_weights(weight_file_path)
-
 if DO_TRAINING:
-    weight_file_path = 'model/{}/{}'.format(model_name,model_name)+'-weights2.{epoch:02d}-{val_loss:.8f}.h5'
+    weight_file_path = 'model/{}/{}'.format(model_name,model_name)+'-weights3.{epoch:02d}-{val_loss:.8f}.h5'
     architecture_file_path = 'model/{}/{}-architecture.json'.format(model_name,model_name)
     open(architecture_file_path, 'w').write(autoencoder.to_json())
     # training
@@ -89,7 +89,7 @@ if DO_TRAINING:
     plt.show()
     plt.savefig('result/{}/loss.png'.format(model_name))
 else:
-    weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder3-weights1.148-0.00020910')
+    weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder3-weights2.118-0.00034362')
     autoencoder.load_weights(weight_file_path)
 
 # features = encoder.predict(satellite_np_data)
@@ -99,4 +99,4 @@ else:
 encoded_prd = autoencoder.predict(satellite_np_data)
 
 data_target = pd.DataFrame(encoded_prd, index=index, columns=columns)
-data_target.to_csv('result/{}/{}-prd2.csv'.format(model_name,model_name), encoding='utf-8')
+data_target.to_csv('result/{}/{}-prd3.csv'.format(model_name,model_name), encoding='utf-8')
