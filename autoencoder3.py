@@ -16,7 +16,7 @@ from keras.constraints import maxnorm
 # 先训练一个特征，训练成功后，加入另外一个特征，直至训练完成
 ##########################
 
-DO_TRAINING = True
+DO_TRAINING = False
 model_name = 'autoencoder3'
 dateparser = lambda x: pd.datetime.strptime(x, '%Y-%m-%d %H:%M:%S')
 satellite_data = pd.read_csv(
@@ -69,8 +69,11 @@ print(autoencoder.summary())
 #weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder3-weights1.148-0.00020910')
 #autoencoder.load_weights(weight_file_path)
 
-weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder3-weights2.118-0.00034362')
-autoencoder.load_weights(weight_file_path)
+#weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder3-weights2.118-0.00034362')
+#autoencoder.load_weights(weight_file_path)
+
+#weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder3-weights3.112-0.00039538')
+#autoencoder.load_weights(weight_file_path)
 
 if DO_TRAINING:
     weight_file_path = 'model/{}/{}'.format(model_name,model_name)+'-weights3.{epoch:02d}-{val_loss:.8f}.h5'
@@ -89,7 +92,7 @@ if DO_TRAINING:
     plt.show()
     plt.savefig('result/{}/loss.png'.format(model_name))
 else:
-    weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder3-weights2.118-0.00034362')
+    weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder3-weights3.112-0.00039538)
     autoencoder.load_weights(weight_file_path)
 
 # features = encoder.predict(satellite_np_data)
