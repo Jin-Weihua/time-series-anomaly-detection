@@ -16,7 +16,7 @@ from keras.constraints import maxnorm
 # 先训练一个特征，训练成功后，加入另外一个特征，直至训练完成
 ##########################
 
-DO_TRAINING = False
+DO_TRAINING = True
 model_name = 'autoencoder3'
 dateparser = lambda x: pd.datetime.strptime(x, '%Y-%m-%d %H:%M:%S')
 satellite_data = pd.read_csv(
@@ -27,9 +27,9 @@ satellite_data = pd.read_csv(
     parse_dates=True,
     date_parser=dateparser)
 
-for column in satellite_data.columns:
-    if column not in ['VNZ4A组蓄电池BEA信号','VNZ5B组蓄电池BEA信号','INZ6_-Y太阳电池阵电流','INZ7_+Y太阳电池阵电流']:
-        satellite_data[column] = 0.5
+#for column in satellite_data.columns:
+#    if column not in ['VNZ4A组蓄电池BEA信号','VNZ5B组蓄电池BEA信号','INZ6_-Y太阳电池阵电流','INZ7_+Y太阳电池阵电流']:
+#        satellite_data[column] = 0.5
 satellite_np_data = satellite_data.as_matrix()
 print(satellite_np_data.shape)
 index = satellite_data.index
@@ -66,11 +66,14 @@ encoder = Model(inputs=input_data, outputs=encoder_output)
 autoencoder.compile(optimizer='adam', loss='mae', metrics=[metrics.mae])
 print(autoencoder.summary())
 
-# weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder3-weights1.12-0.00066610')
-# autoencoder.load_weights(weight_file_path)
+#weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder3-weights1.12-0.00066610')
+#autoencoder.load_weights(weight_file_path)
+
+weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder3-weights2.200-0.00026621')
+autoencoder.load_weights(weight_file_path)
 
 if DO_TRAINING:
-    weight_file_path = 'model/{}/{}'.format(model_name,model_name)+'-weights2.{epoch:02d}-{val_loss:.8f}.h5'
+    weight_file_path = 'model/{}/{}'.format(model_name,model_name)+'-weights3.{epoch:02d}-{val_loss:.8f}.h5'
     architecture_file_path = 'model/{}/{}-architecture.json'.format(model_name,model_name)
     open(architecture_file_path, 'w').write(autoencoder.to_json())
     # training
@@ -96,4 +99,4 @@ else:
 encoded_prd = autoencoder.predict(satellite_np_data)
 
 data_target = pd.DataFrame(encoded_prd, index=index, columns=columns)
-data_target.to_csv('result/{}/{}-prd2.csv'.format(model_name,model_name), encoding='utf-8')
+data_target.to_csv('result/{}/{}-prd3.csv'.format(model_name,model_name), encoding='utf-8')
