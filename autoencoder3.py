@@ -16,7 +16,7 @@ from keras.constraints import maxnorm
 # 先训练一个特征，训练成功后，加入另外一个特征，直至训练完成
 ##########################
 
-DO_TRAINING = False
+DO_TRAINING = True
 model_name = 'autoencoder3'
 dateparser = lambda x: pd.datetime.strptime(x, '%Y-%m-%d %H:%M:%S')
 satellite_data = pd.read_csv(
@@ -27,9 +27,9 @@ satellite_data = pd.read_csv(
     parse_dates=True,
     date_parser=dateparser)
 # ['VNZ4A组蓄电池BEA信号','VNZ5B组蓄电池BEA信号','INZ6_-Y太阳电池阵电流','INZ7_+Y太阳电池阵电流']
-for column in satellite_data.columns:
-   if column not in ['VNZ4A组蓄电池BEA信号','VNZ5B组蓄电池BEA信号','INZ6_-Y太阳电池阵电流','INZ7_+Y太阳电池阵电流','INZ14_ABCR1输入电流','INZ15_ABCR2输入电流']:
-       satellite_data[column] = 0.5
+#for column in satellite_data.columns:
+#   if column not in ['VNZ4A组蓄电池BEA信号','VNZ5B组蓄电池BEA信号','INZ6_-Y太阳电池阵电流','INZ7_+Y太阳电池阵电流','INZ14_ABCR1输入电流','INZ15_ABCR2输入电流']:
+#       satellite_data[column] = 0.5
 satellite_np_data = satellite_data.as_matrix()
 print(satellite_np_data.shape)
 index = satellite_data.index
@@ -72,16 +72,16 @@ print(autoencoder.summary())
 #weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder3-weights2.118-0.00034362')
 #autoencoder.load_weights(weight_file_path)
 
-#weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder3-weights3.112-0.00039538')
-#autoencoder.load_weights(weight_file_path)
+weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder3-weights3.112-0.00039538')
+autoencoder.load_weights(weight_file_path)
 
 if DO_TRAINING:
-    weight_file_path = 'model/{}/{}'.format(model_name,model_name)+'-weights3.{epoch:02d}-{val_loss:.8f}.h5'
+    weight_file_path = 'model/{}/{}'.format(model_name,model_name)+'-weights4.{epoch:02d}-{val_loss:.8f}.h5'
     architecture_file_path = 'model/{}/{}-architecture.json'.format(model_name,model_name)
     open(architecture_file_path, 'w').write(autoencoder.to_json())
     # training
     checkpoint = ModelCheckpoint(weight_file_path)
-    history = autoencoder.fit(x_train, x_train, validation_data=(x_test,x_test), callbacks=[checkpoint],epochs=200, batch_size=10, shuffle=True)
+    history = autoencoder.fit(x_train, x_train, validation_data=(x_test,x_test), callbacks=[checkpoint],epochs=500, batch_size=10, shuffle=True)
 
     plt.plot(history.history['loss'])
     plt.plot(history.history['val_loss'])
@@ -92,7 +92,7 @@ if DO_TRAINING:
     plt.show()
     plt.savefig('result/{}/loss.png'.format(model_name))
 else:
-    weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder3-weights3.112-0.00039538)
+    weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder3-weights3.112-0.00039538')
     autoencoder.load_weights(weight_file_path)
 
 # features = encoder.predict(satellite_np_data)
@@ -102,4 +102,4 @@ else:
 encoded_prd = autoencoder.predict(satellite_np_data)
 
 data_target = pd.DataFrame(encoded_prd, index=index, columns=columns)
-data_target.to_csv('result/{}/{}-prd3.csv'.format(model_name,model_name), encoding='utf-8')
+data_target.to_csv('result/{}/{}-prd4.csv'.format(model_name,model_name), encoding='utf-8')
