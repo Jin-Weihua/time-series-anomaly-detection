@@ -16,7 +16,7 @@ import plotly.plotly as py
 import plotly.graph_objs as go
 import pandas as pd
 
-model_name = 'autoencoder3'
+model_name = 'autoencoder4'
 dateparser = lambda x: pd.datetime.strptime(x, '%Y-%m-%d %H:%M:%S')
 data_raw1 = pd.read_csv(
     'data/data_rolling.csv',
@@ -34,20 +34,20 @@ data_prd1 = pd.read_csv(
     parse_dates=True,
     date_parser=dateparser)
 column = ['INA1_PCU输出母线电流','INA4_A电池组充电电流','INA2_A电池组放电电流','TNZ1PCU分流模块温度1','INZ6_-Y太阳电池阵电流','VNA2_A蓄电池整组电压','VNC1_蓄电池A单体1电压','VNZ2MEA电压(S3R)','VNZ4A组蓄电池BEA信号','VNZ5B组蓄电池BEA信号','INZ14_ABCR1输入电流','INZ15_ABCR2输入电流','INZ7_+Y太阳电池阵电流']
-
+# ['VNZ4A组蓄电池BEA信号','VNZ5B组蓄电池BEA信号','INZ6_-Y太阳电池阵电流','INZ7_+Y太阳电池阵电流','INZ14_ABCR1输入电流','INZ15_ABCR2输入电流']
 data_raw = data_raw1.loc[:,column].iloc[0:10000]
 data_prd = data_prd1.loc[:,column].iloc[0:10000]
 
 data = []
 print(type(data_raw.index))
+column = 'VNZ4A组蓄电池BEA信号' 
+data.append(go.Scatter(x=data_raw.index, y=data_raw[column], mode='markers+lines', name=column))
+data.append(go.Scatter(x=data_prd.index, y=data_prd[column], mode='markers', name=column))
+column = 'INZ6_-Y太阳电池阵电流' 
+data.append(go.Scatter(x=data_raw.index, y=data_raw[column], mode='markers+lines', name=column))
+data.append(go.Scatter(x=data_prd.index, y=data_prd[column], mode='markers', name=column))
 column = 'INZ14_ABCR1输入电流' 
 data.append(go.Scatter(x=data_raw.index, y=data_raw[column], mode='markers+lines', name=column))
 data.append(go.Scatter(x=data_prd.index, y=data_prd[column], mode='markers', name=column))
 
-# for column in data_raw.columns:
-#     data.append(
-#         go.Scatter(
-#             x=data_plot.index, y=data_plot[column], mode='markers', name=column))
-
-
-plotly.offline.plot(data, filename='result/{}/train.html'.format(model_name), auto_open=True)
+plotly.offline.plot(data, filename='result/{}/train3-200.html'.format(model_name), auto_open=True)
