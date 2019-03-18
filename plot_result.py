@@ -25,9 +25,9 @@ data_raw1 = pd.read_csv(
     encoding='utf-8',
     parse_dates=True,
     date_parser=dateparser)
-
+result_name = 'result/{}/{}-prd3-370'.format(model_name,model_name)
 data_prd1 = pd.read_csv(
-    'result/{}/{}-prd3.csv'.format(model_name,model_name),
+    '{}.csv'.format(result_name),
     sep=',',
     index_col=0,
     encoding='utf-8',
@@ -46,8 +46,8 @@ data.append(go.Scatter(x=data_prd.index, y=data_prd[column], mode='markers', nam
 column = 'INZ6_-Y太阳电池阵电流' 
 data.append(go.Scatter(x=data_raw.index, y=data_raw[column], mode='markers+lines', name=column))
 data.append(go.Scatter(x=data_prd.index, y=data_prd[column], mode='markers', name=column))
-column = 'INZ14_ABCR1输入电流' 
-data.append(go.Scatter(x=data_raw.index, y=data_raw[column], mode='markers+lines', name=column))
-data.append(go.Scatter(x=data_prd.index, y=data_prd[column], mode='markers', name=column))
+# column = 'INZ14_ABCR1输入电流' 
+# data.append(go.Scatter(x=data_raw.index, y=data_raw[column], mode='markers+lines', name=column))
+# data.append(go.Scatter(x=data_prd.index, y=data_prd[column], mode='markers', name=column))
 
-plotly.offline.plot(data, filename='result/{}/train3-200.html'.format(model_name), auto_open=True)
+plotly.offline.plot(data, filename='{}.html'.format(result_name), auto_open=True)

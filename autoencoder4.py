@@ -30,6 +30,9 @@ satellite_data = pd.read_csv(
 # for column in satellite_data.columns:
 #   if column not in ['VNZ4A组蓄电池BEA信号','VNZ5B组蓄电池BEA信号','INZ6_-Y太阳电池阵电流','INZ7_+Y太阳电池阵电流','INZ14_ABCR1输入电流','INZ15_ABCR2输入电流']:
 #       satellite_data[column] = 0.5
+for column in satellite_data.columns:
+   if column in ['INZ14_ABCR1输入电流','INZ15_ABCR2输入电流']:
+       satellite_data[column] = 0.5
 satellite_np_data = satellite_data.as_matrix()
 print(satellite_np_data.shape)
 index = satellite_data.index
@@ -72,7 +75,7 @@ print(autoencoder.summary())
 #weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder4-weights2.180-0.00030989')
 #autoencoder.load_weights(weight_file_path)
 
-# weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder4-weights3.200-0.00047587')
+# weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder4-weights3.370-0.00400417')
 # autoencoder.load_weights(weight_file_path)
 
 if DO_TRAINING:
@@ -92,14 +95,14 @@ if DO_TRAINING:
     plt.show()
     plt.savefig('result/{}/loss.png'.format(model_name))
 else:
-    weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder4-weights4.352-0.00454002')
+    weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder4-weights3.370-0.00400417')
     autoencoder.load_weights(weight_file_path)
 
-# features = encoder.predict(satellite_np_data)
-# data_features = pd.DataFrame(features,index=index)
-# data_features.to_csv('result/{}/{}-feat.csv'.format(model_name,model_name), encoding='utf-8')
+features = encoder.predict(satellite_np_data)
+data_features = pd.DataFrame(features,index=index)
+data_features.to_csv('result/{}/{}-feat3-370.csv'.format(model_name,model_name), encoding='utf-8')
 
 encoded_prd = autoencoder.predict(satellite_np_data)
 
 data_target = pd.DataFrame(encoded_prd, index=index, columns=columns)
-data_target.to_csv('result/{}/{}-prd4.csv'.format(model_name,model_name), encoding='utf-8')
+data_target.to_csv('result/{}/{}-prd3-370.csv'.format(model_name,model_name), encoding='utf-8')
