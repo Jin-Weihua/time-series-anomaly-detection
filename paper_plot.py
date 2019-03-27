@@ -70,7 +70,7 @@ ax = fig1.add_subplot(2, 1, 1)
 ax.spines['top'].set_visible(False)  #去掉上边框
 ax.spines['right'].set_visible(False) #去掉右边框
 ax.plot(date_scaler[0:80].loc[:, column], '-', color='green', linewidth=1.0,label='bus current')
-ax.xaxis.set_major_formatter(mdate.DateFormatter('%Y-%m-%d %H:%M:%S'))
+ax.xaxis.set_major_formatter(mdate.DateFormatter('%H:%M:%S'))
 # ax.set_title('bus current',fontsize=12,fontweight='bold')
 plt.xlabel('Time',fontsize=8,fontweight='bold')
 plt.ylabel('Normalized current',fontsize=8,fontweight='bold')
@@ -81,7 +81,7 @@ ax = fig1.add_subplot(2, 1, 2)
 ax.spines['top'].set_visible(False)  #去掉上边框
 ax.spines['right'].set_visible(False) #去掉右边框
 ax.plot(data_rolling[0:80].loc[:, column], '-', color='green', linewidth=1.0,label='bus current')
-ax.xaxis.set_major_formatter(mdate.DateFormatter('%Y-%m-%d %H:%M:%S'))
+ax.xaxis.set_major_formatter(mdate.DateFormatter('%H:%M:%S'))
 # ax.set_title('bus current',fontsize=12,fontweight='bold')
 plt.xlabel('Time', fontsize=8,fontweight='bold')
 plt.ylabel('Normalized current',fontsize=8,fontweight='bold')
@@ -91,4 +91,4 @@ plt.grid(linestyle = "--")
 plt.subplots_adjust(left=0.10, bottom=0.10, right=0.90, top=0.90, hspace=0.4, wspace=0.3)
 # left=0.05, bottom=0.03, right=0.95, top=0.97 分别代表到画布的左侧和底部的距离占整幅图宽和高的比例
 # plt.show()
-plt.savefig('result/1.png',format='png')
+plt.savefig('result/1.svg',format='svg')
