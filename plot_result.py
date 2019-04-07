@@ -46,14 +46,14 @@ data.append(go.Scatter(x=data_prd.index, y=data_prd[column], mode='markers', nam
 column = 'INA4_A电池组充电电流' 
 data.append(go.Scatter(x=data_raw.index, y=data_raw[column], mode='markers+lines', name=column))
 data.append(go.Scatter(x=data_prd.index, y=data_prd[column], mode='markers', name=column))
-# column = 'VNZ4A组蓄电池BEA信号' 
-# data.append(go.Scatter(x=data_raw.index, y=data_raw[column], mode='markers+lines', name=column))
-# data.append(go.Scatter(x=data_prd.index, y=data_prd[column], mode='markers', name=column))
-# column = 'INZ6_-Y太阳电池阵电流' 
-# data.append(go.Scatter(x=data_raw.index, y=data_raw[column], mode='markers+lines', name=column))
-# data.append(go.Scatter(x=data_prd.index, y=data_prd[column], mode='markers', name=column))
-# column = 'INZ14_ABCR1输入电流' 
-# data.append(go.Scatter(x=data_raw.index, y=data_raw[column], mode='markers+lines', name=column))
-# data.append(go.Scatter(x=data_prd.index, y=data_prd[column], mode='markers', name=column))
+column = 'VNZ4A组蓄电池BEA信号' 
+data.append(go.Scatter(x=data_raw.index, y=data_raw[column], mode='markers+lines', name=column))
+data.append(go.Scatter(x=data_prd.index, y=data_prd[column], mode='markers', name=column))
+column = 'INZ6_-Y太阳电池阵电流' 
+data.append(go.Scatter(x=data_raw.index, y=data_raw[column], mode='markers+lines', name=column))
+data.append(go.Scatter(x=data_prd.index, y=data_prd[column], mode='markers', name=column))
+column = 'INZ14_ABCR1输入电流' 
+data.append(go.Scatter(x=data_raw.index, y=data_raw[column], mode='markers+lines', name=column))
+data.append(go.Scatter(x=data_prd.index, y=data_prd[column], mode='markers', name=column))
 
 plotly.offline.plot(data, filename='{}.html'.format(result_name), auto_open=True)

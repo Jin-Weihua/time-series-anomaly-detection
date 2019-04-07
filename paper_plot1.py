@@ -67,9 +67,10 @@ data_rolling = pd.read_csv(
 column1='VNZ4A组蓄电池BEA信号'
 column2='INZ14_ABCR1输入电流'
 column3='INZ6_-Y太阳电池阵电流'
-fig1 = plt.figure(figsize=(8, 5))
+column4='INA4_A电池组充电电流'
+fig1 = plt.figure(figsize=(12, 5))
 
-ax = fig1.add_subplot(1, 4, 1)
+ax = fig1.add_subplot(1, 6, 1)
 ax.spines['top'].set_visible(False)  #去掉上边框
 ax.spines['right'].set_visible(False) #去掉右边框
 ax.plot(date_scaler[1000:7000].loc[:, column1], '-', color='green', linewidth=1.0,label='BEA')
@@ -88,7 +89,7 @@ plt.ylabel('Normalized value',fontsize=8,fontweight='bold')
 # plt.legend()
 plt.grid(linestyle = "--", alpha=0.4)
 
-ax = fig1.add_subplot(1, 4, 2)
+ax = fig1.add_subplot(1, 6, 2)
 ax.spines['top'].set_visible(False)  #去掉上边框
 ax.spines['right'].set_visible(False) #去掉右边框
 ax.plot(data_rolling[1000:7000].loc[:, column1], '-', color='green', linewidth=1.0,label='BEA')
@@ -105,7 +106,8 @@ plt.ylabel('Normalized value',fontsize=8,fontweight='bold')
 # plt.legend()
 plt.grid(linestyle = "--", alpha=0.4)
 
-ax = fig1.add_subplot(1, 4, 3)
+
+ax = fig1.add_subplot(1, 6, 3)
 ax.spines['top'].set_visible(False)  #去掉上边框
 ax.spines['right'].set_visible(False) #去掉右边框
 ax.plot(date_scaler[1000:7000].loc[:, column2], '-', color='green', linewidth=1.0,label='BCR input current')
@@ -123,7 +125,7 @@ plt.ylabel('Normalized value',fontsize=8,fontweight='bold')
 # plt.legend()
 plt.grid(linestyle = "--", alpha=0.4)
 
-ax = fig1.add_subplot(1, 4, 4)
+ax = fig1.add_subplot(1, 6, 4)
 ax.spines['top'].set_visible(False)  #去掉上边框
 ax.spines['right'].set_visible(False) #去掉右边框
 ax.plot(data_rolling[1000:7000].loc[:, column2], '-', color='green', linewidth=1.0,label='BCR input current')
@@ -139,6 +141,43 @@ plt.xlabel('Time(h)', fontsize=8,fontweight='bold')
 plt.ylabel('Normalized value',fontsize=8,fontweight='bold')
 # plt.legend()
 plt.grid(linestyle = "--", alpha=0.4)
+
+
+ax = fig1.add_subplot(1, 6, 5)
+ax.spines['top'].set_visible(False)  #去掉上边框
+ax.spines['right'].set_visible(False) #去掉右边框
+ax.plot(date_scaler[1000:7000].loc[:, column1], '-', color='green', linewidth=1.0,label='BEA')
+ax.plot(date_scaler[1000:7000].loc[:, column4], '-', color='C7', linewidth=1.0,label='Solar Cell Array Current')
+ax.legend(loc='right',fontsize='xx-small')
+ax.xaxis.set_major_formatter(mdate.DateFormatter('%H:%M:%S'))
+ax.xaxis.set_tick_params(rotation=30)
+for label in ax.get_xticklabels():
+    label.set_visible(False)
+for label in ax.get_xticklabels()[::2]:
+    label.set_visible(True)
+    # ax.set_title('bus current',fontsize=12,fontweight='bold')
+plt.xlabel('Time(h)', fontsize=8,fontweight='bold')
+plt.ylabel('Normalized value',fontsize=8,fontweight='bold')
+# plt.legend()
+plt.grid(linestyle = "--", alpha=0.4)
+
+ax = fig1.add_subplot(1, 6, 6)
+ax.spines['top'].set_visible(False)  #去掉上边框
+ax.spines['right'].set_visible(False) #去掉右边框
+ax.plot(data_rolling[1000:7000].loc[:, column4], '-', color='green', linewidth=1.0,label='BCR input current')
+ax.legend(loc='right',fontsize='xx-small')
+ax.xaxis.set_major_formatter(mdate.DateFormatter('%H:%M:%S'))
+ax.xaxis.set_tick_params(rotation=30)
+for label in ax.get_xticklabels():
+    label.set_visible(False)
+for label in ax.get_xticklabels()[::2]:
+    label.set_visible(True)
+# ax.set_title('bus current',fontsize=12,fontweight='bold')
+plt.xlabel('Time(h)', fontsize=8,fontweight='bold')
+plt.ylabel('Normalized value',fontsize=8,fontweight='bold')
+# plt.legend()
+plt.grid(linestyle = "--", alpha=0.4)
+
 
 plt.subplots_adjust(left=0.10, bottom=0.15, right=0.95, top=0.90, hspace=0.4, wspace=0.4)
 # left=0.05, bottom=0.03, right=0.95, top=0.97 分别代表到画布的左侧和底部的距离占整幅图宽和高的比例
