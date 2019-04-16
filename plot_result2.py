@@ -25,7 +25,7 @@ data_raw1 = pd.read_csv(
     encoding='utf-8',
     parse_dates=True,
     date_parser=dateparser)
-result_name = 'result/{}/{}-prd2-500'.format(model_name,model_name)
+result_name = 'result/{}/{}-prd6-40'.format(model_name,model_name)
 data_prd1 = pd.read_csv(
     '{}.csv'.format(result_name),
     sep=',',
@@ -41,13 +41,28 @@ data_prd = data_prd1.loc[:,column].iloc[0:10000]
 data = []
 print(type(data_raw.index))
 column = 'INZ14_ABCR1输入电流' 
-data.append(go.Scatter(x=data_raw.index, y=data_raw[column], mode='markers+lines', name=column))
+# data.append(go.Scatter(x=data_raw.index, y=data_raw[column], mode='markers+lines', name=column))
 data.append(go.Scatter(x=data_prd.index, y=data_prd[column], mode='markers', name=column))
 column = 'INA4_A电池组充电电流' 
-data.append(go.Scatter(x=data_raw.index, y=data_raw[column], mode='markers+lines', name=column))
+# data.append(go.Scatter(x=data_raw.index, y=data_raw[column], mode='markers+lines', name=column))
 data.append(go.Scatter(x=data_prd.index, y=data_prd[column], mode='markers', name=column))
-# column = 'INZ14_ABCR1输入电流' 
+column = 'VNZ2MEA电压(S3R)' 
+# data.append(go.Scatter(x=data_raw.index, y=data_raw[column], mode='markers+lines', name=column))
+data.append(go.Scatter(x=data_prd.index, y=data_prd[column], mode='markers', name=column))
+column = 'TNZ1PCU分流模块温度1' 
+# data.append(go.Scatter(x=data_raw.index, y=data_raw[column], mode='markers+lines', name=column))
+data.append(go.Scatter(x=data_prd.index, y=data_prd[column], mode='markers', name=column))
+column = 'INA2_A电池组放电电流' 
+# data.append(go.Scatter(x=data_raw.index, y=data_raw[column], mode='markers+lines', name=column))
+data.append(go.Scatter(x=data_prd.index, y=data_prd[column], mode='markers', name=column))
+# column = 'INA1_PCU输出母线电流' 
 # data.append(go.Scatter(x=data_raw.index, y=data_raw[column], mode='markers+lines', name=column))
 # data.append(go.Scatter(x=data_prd.index, y=data_prd[column], mode='markers', name=column))
+column = 'VNZ4A组蓄电池BEA信号' 
+# data.append(go.Scatter(x=data_raw.index, y=data_raw[column], mode='markers+lines', name=column))
+data.append(go.Scatter(x=data_prd.index, y=data_prd[column], mode='markers', name=column))
+column = 'INZ6_-Y太阳电池阵电流' 
+# data.append(go.Scatter(x=data_raw.index, y=data_raw[column], mode='markers+lines', name=column))
+data.append(go.Scatter(x=data_prd.index, y=data_prd[column], mode='markers', name=column))
 
 plotly.offline.plot(data, filename='{}.html'.format(result_name), auto_open=True)

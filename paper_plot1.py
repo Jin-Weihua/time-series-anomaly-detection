@@ -111,7 +111,7 @@ ax = fig1.add_subplot(1, 6, 3)
 ax.spines['top'].set_visible(False)  #去掉上边框
 ax.spines['right'].set_visible(False) #去掉右边框
 ax.plot(date_scaler[1000:7000].loc[:, column2], '-', color='green', linewidth=1.0,label='BCR input current')
-ax.plot(date_scaler[1000:7000].loc[:, column3], '-', color='C7', linewidth=1.0,label='Solar Cell Array Current')
+ax.plot(date_scaler[1000:7000].loc[:, column3], '-', color='C7', linewidth=1.0,label='Solar cell array current')
 ax.legend(loc='right',fontsize='xx-small')
 ax.xaxis.set_major_formatter(mdate.DateFormatter('%H:%M:%S'))
 ax.xaxis.set_tick_params(rotation=30)
@@ -147,7 +147,7 @@ ax = fig1.add_subplot(1, 6, 5)
 ax.spines['top'].set_visible(False)  #去掉上边框
 ax.spines['right'].set_visible(False) #去掉右边框
 ax.plot(date_scaler[1000:7000].loc[:, column1], '-', color='green', linewidth=1.0,label='BEA')
-ax.plot(date_scaler[1000:7000].loc[:, column4], '-', color='C7', linewidth=1.0,label='Solar Cell Array Current')
+ax.plot(date_scaler[1000:7000].loc[:, column4], '-', color='C7', linewidth=1.0,label='Battery set charge current')
 ax.legend(loc='right',fontsize='xx-small')
 ax.xaxis.set_major_formatter(mdate.DateFormatter('%H:%M:%S'))
 ax.xaxis.set_tick_params(rotation=30)
@@ -164,7 +164,7 @@ plt.grid(linestyle = "--", alpha=0.4)
 ax = fig1.add_subplot(1, 6, 6)
 ax.spines['top'].set_visible(False)  #去掉上边框
 ax.spines['right'].set_visible(False) #去掉右边框
-ax.plot(data_rolling[1000:7000].loc[:, column4], '-', color='green', linewidth=1.0,label='BCR input current')
+ax.plot(data_rolling[1000:7000].loc[:, column4], '-', color='green', linewidth=1.0,label='Battery set charge current')
 ax.legend(loc='right',fontsize='xx-small')
 ax.xaxis.set_major_formatter(mdate.DateFormatter('%H:%M:%S'))
 ax.xaxis.set_tick_params(rotation=30)
