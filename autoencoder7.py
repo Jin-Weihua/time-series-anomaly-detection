@@ -11,6 +11,7 @@ import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 from keras.constraints import maxnorm
 from keras.layers.advanced_activations import LeakyReLU
+from keras.utils import plot_model
 
 ##########################
 # autoencoder6 去燥自编码器，分部训练
@@ -37,9 +38,18 @@ def addNoise(x_train, x_test):
 
 DO_TRAINING = False
 model_name = 'autoencoder7'
+# dateparser = lambda x: pd.datetime.strptime(x, '%Y-%m-%d %H:%M:%S')
+# satellite_data = pd.read_csv(
+#     'data/data_rolling.csv',
+#     sep=',',
+#     index_col=0,
+#     encoding='utf-8',
+#     parse_dates=True,
+#     date_parser=dateparser)
+
 dateparser = lambda x: pd.datetime.strptime(x, '%Y-%m-%d %H:%M:%S')
 satellite_data = pd.read_csv(
-    'data/data_rolling.csv',
+    'data/data_anomaly_rolling2.csv',
     sep=',',
     index_col=0,
     encoding='utf-8',
@@ -100,6 +110,7 @@ encoder = Model(inputs=input_data, outputs=encoder_output)
 # compile autoencoder
 autoencoder.compile(optimizer='adam', loss='mae', metrics=[metrics.mae])
 print(autoencoder.summary())
+plot_model(autoencoder,to_file='result/model.png',show_shapes=True)
 
 # weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder7-weights1.100-0.00000012')
 # autoencoder.load_weights(weight_file_path)
@@ -127,7 +138,7 @@ if DO_TRAINING:
     plt.show()
     plt.savefig('result/{}/loss.png'.format(model_name))
 else:
-    weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder7-weights7.70-0.00004884')
+    weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder7-weights7.249-0.00004697')
     autoencoder.load_weights(weight_file_path)
 
 # features = encoder.predict(satellite_np_data)
@@ -136,5 +147,14 @@ else:
 
 encoded_prd = autoencoder.predict(satellite_np_data)
 
+# data_target = pd.DataFrame(encoded_prd, index=index, columns=columns)
+# data_target.to_csv('result/{}/{}-prd7-70.csv'.format(model_name,model_name), encoding='utf-8')
+
 data_target = pd.DataFrame(encoded_prd, index=index, columns=columns)
-data_target.to_csv('result/{}/{}-prd7-70.csv'.format(model_name,model_name), encoding='utf-8')
+
+dataset_basic = data_target.as_matrix()
+# data_target.to_csv('result/{}/{}-ano7-249.csv'.format(model_name,model_name), encoding='utf-8')
+
+dist = np.linalg.norm(dataset_basic - satellite_np_data, axis=-1).reshape(-1,1)
+data_dist = pd.DataFrame(dist, index=index, columns=['norm'])
+data_dist.to_csv('result/{}/{}-ano7-249-2.csv'.format(model_name,model_name), encoding='utf-8')

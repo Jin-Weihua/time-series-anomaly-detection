@@ -65,7 +65,7 @@ print(data_raw.describe(include='all'))
 
 data_new = data_raw.dropna()
 print(data_new.info())
-data_new.to_csv('data/data_std.csv', encoding='utf-8')
+# data_new.to_csv('data/data_std.csv', encoding='utf-8')
 
 
 fig1 = plt.figure(figsize=(15, 70), dpi=200)
@@ -93,4 +93,25 @@ print(satellite_np_data.shape)
 index = satellite_data.index
 columns = satellite_data.columns
 data_rolling = pd.DataFrame(satellite_np_data, index=index, columns=columns)
-data_rolling.to_csv('data/data_rolling.csv', encoding='utf-8')
+# data_rolling.to_csv('data/data_rolling.csv', encoding='utf-8')
+
+satellite_data_ = pd.DataFrame()
+alt = pd.DataFrame()
+for i in range(len(satellite_data)):
+    a1 = satellite_data.iloc[i]
+    a2 = satellite_data.iloc[i+1]
+    a3 = satellite_data.iloc[i+2]
+    a4 = satellite_data.iloc[i+3]
+    a5 = satellite_data.iloc[i+4]
+    d1=pd.DataFrame(a1).T
+    d2=pd.DataFrame(a2).T
+    d3=pd.DataFrame(a3).T
+    d4=pd.DataFrame(a4).T
+    d5=pd.DataFrame(a5).T
+    satellite_data_=satellite_data_.append([d1])  #每行复制5倍
+    satellite_data_=satellite_data_.append([d2])
+    satellite_data_=satellite_data_.append([d3])
+    satellite_data_=satellite_data_.append([d4])
+    satellite_data_=satellite_data_.append([d5])
+
+satellite_data_.to_csv('data/data_lstm.csv', encoding='utf-8')
