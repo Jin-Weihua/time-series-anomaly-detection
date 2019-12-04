@@ -97,7 +97,7 @@ data_rolling = pd.DataFrame(satellite_np_data, index=index, columns=columns)
 
 satellite_data_ = pd.DataFrame()
 alt = pd.DataFrame()
-for i in range(len(satellite_data)):
+for i in range(len(satellite_data)-5):
     a1 = satellite_data.iloc[i]
     a2 = satellite_data.iloc[i+1]
     a3 = satellite_data.iloc[i+2]
