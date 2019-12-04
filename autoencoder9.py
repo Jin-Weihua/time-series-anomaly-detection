@@ -162,7 +162,7 @@ if DO_TRAINING:
     checkpoint = ModelCheckpoint(weight_file_path)
 
     history = model.fit(train_dataset,train_dataset_,
-                    validation_data=(test_dataset,test_dataset_), callbacks=[checkpoint],epochs=2, batch_size=10, shuffle=True)
+                    validation_data=(test_dataset,test_dataset_), callbacks=[checkpoint],epochs=2, batch_size=10, shuffle=False)
 
 
     plt.plot(history.history['loss'])
