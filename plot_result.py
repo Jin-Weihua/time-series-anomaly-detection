@@ -29,7 +29,7 @@ data_raw1 = pd.read_csv(
     encoding='utf-8',
     parse_dates=True,
     date_parser=dateparser)
-result_name = 'result/{}/{}-prd-499-'.format(model_name,model_name)
+result_name = 'result/{}/{}-prd1-199-'.format(model_name,model_name)
 data_prd1 = pd.read_csv(
     '{}.csv'.format(result_name),
     sep=',',

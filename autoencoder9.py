@@ -135,8 +135,8 @@ test_dataset_ = np.reshape(
              time_window_size, x_test_.shape[1]))
 
 input_data = Input(batch_shape=(10, time_window_size, input_dim)) 
-encoded = LSTM(units=100, activation='relu',return_sequences=True)(input_data)
-decoded = LSTM(units=100, activation='relu', return_sequences=True)(encoded)
+encoded = LSTM(units=100, activation='tanh',return_sequences=True)(input_data)
+decoded = LSTM(units=100, activation='tanh',return_sequences=True)(encoded)
 decoded = Dense(units = input_dim,activation='tanh')(decoded)
 model = Model(inputs=input_data, outputs=decoded)
 
@@ -155,14 +155,14 @@ print(model.summary())
 # plot_model(model,to_file='result/{}/model.png'.format(model_name),show_shapes=True)
 
 if DO_TRAINING:
-    weight_file_path = 'model/{}/{}'.format(model_name,model_name)+'-weights.{epoch:02d}-{val_loss:.8f}.h5'
+    weight_file_path = 'model/{}/{}'.format(model_name,model_name)+'-weights1.{epoch:02d}-{val_loss:.8f}.h5'
     architecture_file_path = 'model/{}/{}-architecture.json'.format(model_name,model_name)
     open(architecture_file_path, 'w').write(model.to_json())
     # training
     checkpoint = ModelCheckpoint(weight_file_path)
 
     history = model.fit(train_dataset,train_dataset_,
-                    validation_data=(test_dataset,test_dataset_), callbacks=[checkpoint],epochs=2, batch_size=10, shuffle=False)
+                    validation_data=(test_dataset,test_dataset_), callbacks=[checkpoint],epochs=200, batch_size=10, shuffle=False)
 
 
     plt.plot(history.history['loss'])
@@ -174,7 +174,7 @@ if DO_TRAINING:
     plt.show()
     plt.savefig('result/{}/loss.png'.format(model_name))
 else:
-    weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder9-weights.499-0.00124347')
+    weight_file_path = 'model/{}/{}.h5'.format(model_name,'autoencoder9-weights1.199-0.00072722')
     model.load_weights(weight_file_path)
 
 # features = encoder.predict(satellite_np_data)
@@ -206,7 +206,7 @@ for i in range(1,96600):
     a = data_target.iloc[i*5]
     d=pd.DataFrame(a).T
     data_target_=data_target_.append([d])
-data_target_.to_csv('result/{}/{}-prd-499-.csv'.format(model_name,model_name), encoding='utf-8')
+data_target_.to_csv('result/{}/{}-prd1-199-.csv'.format(model_name,model_name), encoding='utf-8')
 
 # dataset_basic = data_target.as_matrix()
 # # data_target.to_csv('result/{}/{}-ano7-249.csv'.format(model_name,model_name), encoding='utf-8')
