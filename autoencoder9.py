@@ -206,7 +206,7 @@ for i in range(1,96600):
     a = data_target.iloc[i*5]
     d=pd.DataFrame(a).T
     data_target_=data_target_.append([d])
-data_target_.to_csv('result/{}/{}-prd1-199-.csv'.format(model_name,model_name), encoding='utf-8')
+data_target_.to_csv('result/{}/{}-prd1-199.csv'.format(model_name,model_name), encoding='utf-8')
 
 # dataset_basic = data_target.as_matrix()
 # # data_target.to_csv('result/{}/{}-ano7-249.csv'.format(model_name,model_name), encoding='utf-8')

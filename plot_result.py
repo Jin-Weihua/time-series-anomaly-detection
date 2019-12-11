@@ -29,7 +29,7 @@ data_raw1 = pd.read_csv(
     encoding='utf-8',
     parse_dates=True,
     date_parser=dateparser)
-result_name = 'result/{}/{}-prd1-199-'.format(model_name,model_name)
+result_name = 'result/{}/{}-prd1-199'.format(model_name,model_name)
 data_prd1 = pd.read_csv(
     '{}.csv'.format(result_name),
     sep=',',
@@ -46,7 +46,7 @@ data = []
 print(type(data_raw.index))
 
 
-column = 'VNZ4A组蓄电池BEA信号' 
+column = 'INA4_A电池组充电电流' 
 data.append(go.Scatter(x=data_raw.index, y=data_raw[column], mode='markers+lines', name=column))
 data.append(go.Scatter(x=data_prd.index, y=data_prd[column], mode='markers', name=column))
 
